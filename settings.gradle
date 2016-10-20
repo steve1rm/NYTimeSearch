@@ -1,0 +1,2 @@
+include ':NYTimesSearch'
+project(':NYTimesSearch').projectDir = new File('app')
