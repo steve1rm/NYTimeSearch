@@ -3,6 +3,7 @@ package me.androidbox.nytimessearch.newslist;
 import javax.inject.Inject;
 
 import me.androidbox.nytimessearch.di.DaggerInjector;
+import me.androidbox.nytimessearch.model.NYTimesSearch;
 import timber.log.Timber;
 
 /**
@@ -42,8 +43,13 @@ public class NewsListPresenterImp implements
     /* Model <<-- Presenter */
     @Override
     public void getSearchRequest() {
+        mNewsListModelImp.getSearchResults(NewsListPresenterImp.this);
+    }
+
+    @Override
+    public void getSearchRequestQuery() {
         String query = view.getInputUserQuery();
-        mNewsListModelImp.getSearchResults(query, NewsListPresenterImp.this);
+        mNewsListModelImp.getSearchResultsQuery(query, NewsListPresenterImp.this);
     }
 
     /* Model -->> Presenter */
@@ -54,7 +60,7 @@ public class NewsListPresenterImp implements
     }
 
     @Override
-    public void onSearchSuccess() {
+    public void onSearchSuccess(NYTimesSearch nyTimesSearch) {
         /* Update view */
         view.displayQueryResults();
     }

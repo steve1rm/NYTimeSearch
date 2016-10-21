@@ -1,5 +1,7 @@
 package me.androidbox.nytimessearch.newslist;
 
+import me.androidbox.nytimessearch.model.NYTimesSearch;
+
 /**
  * Created by steve on 10/20/16.
  */
@@ -7,10 +9,11 @@ package me.androidbox.nytimessearch.newslist;
 public interface NewsListModelContract {
     interface NewsListSearchListener {
         void onSearchFailed(String errMessage);
-        void onSearchSuccess();
+        void onSearchSuccess(NYTimesSearch nyTimesSearch);
     }
 
-    void getSearchResults(String query, NewsListSearchListener newsListSearchListener);
+    void getSearchResults(NewsListSearchListener newsListSearchListener);
+    void getSearchResultsQuery(String query, NewsListSearchListener newsListSearchListener);
 
     void releaseResources();
 }

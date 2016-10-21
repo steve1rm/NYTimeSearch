@@ -10,6 +10,9 @@ import rx.Observable;
  */
 
 public interface NYTimesSearchService {
-    @GET("search/")
-    Observable<NYTimesSearch> getNewsSearch(@Query("api_key") String apiKey);
+    @GET("articlesearch.json")
+    Observable<NYTimesSearch> getNewsFeed(@Query("api_key") String apiKey);
+
+    @GET("articlesearch.json")
+    Observable<NYTimesSearch> getNewsQuery(@Query("api_key") String apiKey, @Query("q") String query);
 }

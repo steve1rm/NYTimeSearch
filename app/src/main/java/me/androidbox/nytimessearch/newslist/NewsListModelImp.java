@@ -29,8 +29,8 @@ public class NewsListModelImp implements NewsListModelContract {
     }
 
     @Override
-    public void getSearchResults(String query, final NewsListSearchListener newsListSearchListener) {
-        mSubscription = mNYTimesSearchService.getNewsSearch(Constants.API_KEY)
+    public void getSearchResults(final NewsListSearchListener newsListSearchListener) {
+        mSubscription = mNYTimesSearchService.getNewsFeed(Constants.API_KEY)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<NYTimesSearch>() {
@@ -48,7 +48,32 @@ public class NewsListModelImp implements NewsListModelContract {
                     @Override
                     public void onNext(NYTimesSearch nyTimesSearch) {
                         Timber.d("onNext: %s", nyTimesSearch.getStatus());
-                        newsListSearchListener.onSearchSuccess();
+                        newsListSearchListener.onSearchSuccess(nyTimesSearch);
+                    }
+                });
+    }
+
+    @Override
+    public void getSearchResultsQuery(String query, final NewsListSearchListener newsListSearchListener) {
+        mSubscription = mNYTimesSearchService.getNewsQuery(Constants.API_KEY, query)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<NYTimesSearch>() {
+                    @Override
+                    public void onCompleted() {
+                        Timber.d("onCompleted");
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Timber.e(e, "onError");
+                        newsListSearchListener.onSearchFailed(e.getMessage());
+                    }
+
+                    @Override
+                    public void onNext(NYTimesSearch nyTimesSearch) {
+                        Timber.d("onNext: %s" + nyTimesSearch.getStatus());
+                        newsListSearchListener.onSearchSuccess(nyTimesSearch);
                     }
                 });
     }
