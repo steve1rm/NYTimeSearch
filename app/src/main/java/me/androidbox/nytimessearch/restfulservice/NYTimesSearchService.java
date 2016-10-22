@@ -13,6 +13,14 @@ public interface NYTimesSearchService {
     @GET("articlesearch.json")
     Observable<NYTimesSearch> getNewsFeed(@Query("api_key") String apiKey);
 
+    /* news_desk = fq */
+    /* begin_date */
+    /* sort oldest newest */
+
     @GET("articlesearch.json")
-    Observable<NYTimesSearch> getNewsQuery(@Query("api_key") String apiKey, @Query("q") String query);
+    Observable<NYTimesSearch> getNewsdeskQuery(@Query("begin_date") String beginDate,
+                                               @Query("sort") String sort,
+                                               @Query("fq") String newsdesk,
+                                               @Query("q") String query,
+                                               @Query("api_key") String apiKey);
 }

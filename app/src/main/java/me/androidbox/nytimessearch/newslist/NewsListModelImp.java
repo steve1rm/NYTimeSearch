@@ -29,7 +29,7 @@ public class NewsListModelImp implements NewsListModelContract {
     }
 
     @Override
-    public void getSearchResults(final NewsListSearchListener newsListSearchListener) {
+    public void getSearchAllResults(final NewsListSearchListener newsListSearchListener) {
         mSubscription = mNYTimesSearchService.getNewsFeed(Constants.API_KEY)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -53,9 +53,20 @@ public class NewsListModelImp implements NewsListModelContract {
                 });
     }
 
+    /*
+    news_desk:(\"Politics\" & \"Health\")
+    begin_date = 20160112
+    sort = oldest or newest
+     */
+
     @Override
-    public void getSearchResultsQuery(String query, final NewsListSearchListener newsListSearchListener) {
-        mSubscription = mNYTimesSearchService.getNewsQuery(Constants.API_KEY, query)
+    public void getSearchNewsDeskResults(String newsdesk, final NewsListSearchListener newsListSearchListener) {
+        String query = "trump";
+        String beginDate = "20160101";
+        String newsDesk = "news_desk:(\"Politics\" \"Health\")";
+        String sort = "newest";
+
+        mSubscription = mNYTimesSearchService.getNewsdeskQuery(beginDate, sort, newsDesk, query, Constants.API_KEY)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<NYTimesSearch>() {
@@ -72,7 +83,7 @@ public class NewsListModelImp implements NewsListModelContract {
 
                     @Override
                     public void onNext(NYTimesSearch nyTimesSearch) {
-                        Timber.d("onNext: %s" + nyTimesSearch.getStatus());
+                        Timber.d("onNext: %s", nyTimesSearch.getStatus());
                         newsListSearchListener.onSearchSuccess(nyTimesSearch);
                     }
                 });

@@ -12,8 +12,8 @@ public interface NewsListModelContract {
         void onSearchSuccess(NYTimesSearch nyTimesSearch);
     }
 
-    void getSearchResults(NewsListSearchListener newsListSearchListener);
-    void getSearchResultsQuery(String query, NewsListSearchListener newsListSearchListener);
+    void getSearchAllResults(NewsListSearchListener newsListSearchListener);
+    void getSearchNewsDeskResults(String newsdesk, NewsListSearchListener newsListSearchListener);
 
     void releaseResources();
 }

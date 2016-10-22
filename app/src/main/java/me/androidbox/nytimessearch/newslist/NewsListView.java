@@ -56,7 +56,7 @@ public class NewsListView extends Fragment implements NewsListViewContract {
     @Override
     public String getInputUserQuery() {
         /* Get the value from the text field */
-        return "trump";
+        return "Books";
     }
 
     @Override

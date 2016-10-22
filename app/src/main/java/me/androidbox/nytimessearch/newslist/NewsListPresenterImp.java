@@ -43,13 +43,13 @@ public class NewsListPresenterImp implements
     /* Model <<-- Presenter */
     @Override
     public void getSearchRequest() {
-        mNewsListModelImp.getSearchResults(NewsListPresenterImp.this);
+        mNewsListModelImp.getSearchAllResults(NewsListPresenterImp.this);
     }
 
     @Override
     public void getSearchRequestQuery() {
         String query = view.getInputUserQuery();
-        mNewsListModelImp.getSearchResultsQuery(query, NewsListPresenterImp.this);
+        mNewsListModelImp.getSearchNewsDeskResults(query, NewsListPresenterImp.this);
     }
 
     /* Model -->> Presenter */
