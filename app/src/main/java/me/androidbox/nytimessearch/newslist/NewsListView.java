@@ -4,6 +4,8 @@ package me.androidbox.nytimessearch.newslist;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +26,7 @@ import butterknife.OnClick;
 import butterknife.Unbinder;
 import me.androidbox.nytimessearch.R;
 import me.androidbox.nytimessearch.di.DaggerInjector;
+import me.androidbox.nytimessearch.model.NYTimesSearch;
 import timber.log.Timber;
 
 /**
@@ -36,6 +39,8 @@ public class NewsListView extends Fragment implements
     @Inject NewsListPresenterImp mNewsListPresenterImp;
 
     @BindView(R.id.tvDate) TextView tvDate;
+    @BindView(R.id.rvNewsFeed) RecyclerView mRvNewsFeed;
+
     private Unbinder mUnbinder;
 
     public NewsListView() {
@@ -54,7 +59,18 @@ public class NewsListView extends Fragment implements
 
         ButterKnife.bind(NewsListView.this, view);
 
+        setupAdapter();
+
         return view;
+    }
+
+    private NewsFeedAdapter mNewsFeedAdapter;
+
+    private void setupAdapter() {
+        mNewsFeedAdapter = new NewsFeedAdapter(new NYTimesSearch());
+        StaggeredGridLayoutManager staggeredGridLayoutManager = new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL);
+        mRvNewsFeed.setLayoutManager(staggeredGridLayoutManager);
+        mRvNewsFeed.setAdapter(mNewsFeedAdapter);
     }
 
     @Override
@@ -91,8 +107,6 @@ public class NewsListView extends Fragment implements
         super.onActivityCreated(savedInstanceState);
         DaggerInjector.getAppComponent().inject(NewsListView.this);
 
-
-
         if(mNewsListPresenterImp != null) {
             Timber.d("mNewsListPresenterImp != null");
             mNewsListPresenterImp.attachView(NewsListView.this);
@@ -101,15 +115,6 @@ public class NewsListView extends Fragment implements
         else {
             Timber.e("mNewsListPresenterImp == null");
         }
-    }
-
-    public void onDateSet(DatePicker datePicker, int year, int month, int day) {
-        StringBuilder sb = new StringBuilder();
-        sb.append(day);
-        sb.append("-");
-        sb.append(month + 1);
-        sb.append("-");
-        sb.append(year);
     }
 
     @Override
@@ -124,13 +129,18 @@ public class NewsListView extends Fragment implements
     }
 
     @Override
-    public void displayQueryResults() {
-        Timber.d("displayQueryResults");
+    public void displayQueryResults(NYTimesSearch nyTimesSearch) {
+        Timber.d("displayQueryResults: %s %s",
+                nyTimesSearch.getStatus(),
+                nyTimesSearch.getResponse().getDocs().get(0).getHeadline().getMain());
+
+        mNewsFeedAdapter.updateNewsFeed(nyTimesSearch);
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         mNewsListPresenterImp.detachView();
+        mUnbinder.unbind();
     }
 }

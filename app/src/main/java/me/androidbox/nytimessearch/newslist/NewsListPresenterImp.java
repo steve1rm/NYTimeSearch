@@ -62,6 +62,6 @@ public class NewsListPresenterImp implements
     @Override
     public void onSearchSuccess(NYTimesSearch nyTimesSearch) {
         /* Update view */
-        view.displayQueryResults();
+        view.displayQueryResults(nyTimesSearch);
     }
 }

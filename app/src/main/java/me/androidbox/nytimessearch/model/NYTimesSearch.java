@@ -32,6 +32,14 @@ public class NYTimesSearch {
         private Meta meta;
         private List<Docs> docs;
 
+        public List<Docs> getDocs() {
+            return docs;
+        }
+
+        public Meta getMeta() {
+            return meta;
+        }
+
         public static class Meta {
             private int hits;
             private int time;

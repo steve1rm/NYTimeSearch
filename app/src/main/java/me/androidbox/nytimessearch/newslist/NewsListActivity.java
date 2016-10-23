@@ -8,6 +8,7 @@ import me.androidbox.nytimessearch.R;
 
 public class NewsListActivity extends AppCompatActivity {
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
