@@ -99,7 +99,7 @@ public class NewsListView extends Fragment implements
     private void setupAdapter() {
 
         mNewsFeedAdapter = new NewsFeedAdapter(new NYTimesSearch(), getActivity());
-        StaggeredGridLayoutManager staggeredGridLayoutManager = new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL);
+        StaggeredGridLayoutManager staggeredGridLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         mRvNewsFeed.setLayoutManager(staggeredGridLayoutManager);
         mRvNewsFeed.setAdapter(mNewsFeedAdapter);
 

@@ -24,6 +24,7 @@ import me.androidbox.nytimessearch.R;
 import me.androidbox.nytimessearch.model.NYTimesSearch;
 import me.androidbox.nytimessearch.utils.Constants;
 import me.androidbox.nytimessearch.utils.ImageUtils;
+import timber.log.Timber;
 
 /**
  * Created by steve on 10/22/16.
@@ -63,8 +64,21 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.NewsFe
 
     @Override
     public void onBindViewHolder(NewsFeedViewHolder holder, int position) {
+        Timber.d("onBindViewHolder");
+
         if(mNyTimesSearch.getResponse().getDocs().get(position).getHeadline() != null) {
-            holder.mTvHeadline.setText(mNyTimesSearch.getResponse().getDocs().get(position).getHeadline().getMain());
+            String headLine = mNyTimesSearch.getResponse().getDocs().get(position).getHeadline().getMain();
+            if(!TextUtils.isEmpty(headLine)) {
+                Timber.d("onBindViewHolder headline: %s", headLine);
+                holder.mTvHeadline.setText(mNyTimesSearch.getResponse().getDocs().get(position).getHeadline().getMain());
+            }
+            else {
+                headLine = mNyTimesSearch.getResponse().getDocs().get(position).getHeadline().getPrint_headline();
+                if(!TextUtils.isEmpty(headLine)) {
+                    Timber.d("onBindViewHolder print headline: %s", headLine);
+                    holder.mTvHeadline.setText(mNyTimesSearch.getResponse().getDocs().get(position).getHeadline().getMain());
+                }
+            }
         }
         else {
      //       holder.mTvHeadline.setText(mytimesList.get(position).getResponse().getDocs().get(0).getHeadline().getMain());

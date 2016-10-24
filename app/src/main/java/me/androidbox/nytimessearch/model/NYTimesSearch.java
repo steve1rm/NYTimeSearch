@@ -210,6 +210,7 @@ public class NYTimesSearch {
                 private String main;
                 private String content_kicker;
                 private String kicker;
+                private String print_headline;
 
                 public String getContent_kicker() {
                     return content_kicker;
@@ -221,6 +222,10 @@ public class NYTimesSearch {
 
                 public String getMain() {
                     return main;
+                }
+
+                public String getPrint_headline() {
+                    return print_headline;
                 }
             }
 
