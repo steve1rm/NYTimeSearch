@@ -75,7 +75,7 @@ public class NYTimesSearch {
             private String news_desk;
             private String section_name;
             private String subsection_name;
-            private Byline byline;
+            private transient Byline byline;
             private String type_of_material;
             private String word_count;
             private String slideshow_credits;
