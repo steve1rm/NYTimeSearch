@@ -1,12 +1,21 @@
 package me.androidbox.nytimessearch.newslist;
 
 
+
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.view.MenuItemCompat;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.DatePicker;
@@ -38,10 +47,12 @@ public class NewsListView extends Fragment implements
 
     @Inject NewsListPresenterImp mNewsListPresenterImp;
 
-    @BindView(R.id.tvDate) TextView tvDate;
+ //   @BindView(R.id.tvDate) TextView tvDate;
     @BindView(R.id.rvNewsFeed) RecyclerView mRvNewsFeed;
+    @BindView(R.id.tbNYTimes) Toolbar mToobar;
 
     private Unbinder mUnbinder;
+    private NewsFeedAdapter mNewsFeedAdapter;
 
     public NewsListView() {
         // Required empty public constructor
@@ -52,6 +63,12 @@ public class NewsListView extends Fragment implements
     }
 
     @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+     //   setHasOptionsMenu(true);
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
@@ -59,12 +76,20 @@ public class NewsListView extends Fragment implements
 
         mUnbinder = ButterKnife.bind(NewsListView.this, view);
 
+        setupToolbar();
         setupAdapter();
+
+    /*    FragmentManager fragmentManager = getFragmentManager();
+        FilterSearch filterSearch = new FilterSearch();
+        filterSearch.show(fragmentManager, "filtersearch");*/
 
         return view;
     }
 
-    private NewsFeedAdapter mNewsFeedAdapter;
+    private void setupToolbar() {
+        AppCompatActivity appCompatActivity = (AppCompatActivity)getActivity();
+        appCompatActivity.setSupportActionBar(mToobar);
+    }
 
     private void setupAdapter() {
         mNewsFeedAdapter = new NewsFeedAdapter(new NYTimesSearch(), getActivity());
@@ -89,9 +114,10 @@ public class NewsListView extends Fragment implements
         sb.append("-");
         sb.append(year);
 
-        tvDate.setText(sb.toString());
+        //tvDate.setText(sb.toString());
     }
 
+/*
     @SuppressWarnings("unused")
     @OnClick(R.id.tvDate)
     public void getDate() {
@@ -101,6 +127,7 @@ public class NewsListView extends Fragment implements
                 .setTargetFragment(NewsListView.this);
         datePickerDialogFragment.show();
     }
+*/
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
@@ -135,6 +162,34 @@ public class NewsListView extends Fragment implements
                 nyTimesSearch.getResponse().getDocs().get(0).getHeadline().getMain());
 
         mNewsFeedAdapter.updateNewsFeed(nyTimesSearch);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.main, menu);
+        MenuItem searchItem = menu.findItem(R.id.action_search);
+        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+        searchItem.expandActionView();
+        searchView.requestFocus();
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                searchView.clearFocus();
+
+                Toast.makeText(getActivity(), "Query: " + query, Toast.LENGTH_LONG).show();
+
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
+
+
+
+
     }
 
     @Override
