@@ -15,6 +15,7 @@
         android:layout_height="wrap_content"
         android:textColor="@android:color/black"
         android:textSize="20sp"
+        android:textColorHint="@android:color/black"
         android:text="arts"
         android:fontFamily="sans-serif-condensed"/>
 
@@ -49,7 +50,7 @@
     </Spinner>
 
     <TextView
-        android:id="@+id/tvBeginDate"
+        android:id="@+id/tvDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toRightOf="@id/placeHolder"
@@ -62,7 +63,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toRightOf="@id/placeHolder"
-        android:layout_below="@id/tvBeginDate"
+        android:layout_below="@id/tvDate"
         android:textColor="@android:color/black"
         android:hint="Place your search here"
         android:fontFamily="sans-serif-condensed"/>

@@ -31,7 +31,9 @@ public class NewsListPresenterImp implements
 
     @Override
     public void attachView(NewsListViewContract newsListView) {
-        view = newsListView;
+        if(view == null) {
+            view = newsListView;
+        }
     }
 
     @Override
@@ -43,7 +45,7 @@ public class NewsListPresenterImp implements
     /* Model <<-- Presenter */
     @Override
     public void getSearchRequest() {
-        mNewsListModelImp.getSearchAllResults(NewsListPresenterImp.this);
+        mNewsListModelImp.getSearchNewsDeskResults("", NewsListPresenterImp.this);
     }
 
     @Override

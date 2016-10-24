@@ -68,7 +68,7 @@ public class NYTimesSearch {
             private List<Blog> blog;
             private String source;
             private List<Multimedia> multimedia;
-            private Headline headline;
+            private transient Headline headline;
             private List<Keywords> keywords;
             private String pub_date;
             private String document_type;

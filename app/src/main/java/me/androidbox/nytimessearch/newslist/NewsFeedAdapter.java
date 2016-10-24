@@ -13,6 +13,9 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -30,6 +33,7 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.NewsFe
 
     private NYTimesSearch mNyTimesSearch;
     private WeakReference<Context> mContext;
+    private List<NYTimesSearch.Response.Docs> mytimesList = Collections.emptyList();
 
     public NewsFeedAdapter(NYTimesSearch nyTimesSearch, Context context) {
         mNyTimesSearch = nyTimesSearch;
@@ -59,7 +63,13 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.NewsFe
 
     @Override
     public void onBindViewHolder(NewsFeedViewHolder holder, int position) {
-        holder.mTvHeadline.setText(mNyTimesSearch.getResponse().getDocs().get(position).getHeadline().getMain());
+        if(mNyTimesSearch.getResponse().getDocs().get(position).getHeadline() != null) {
+            holder.mTvHeadline.setText(mNyTimesSearch.getResponse().getDocs().get(position).getHeadline().getMain());
+        }
+        else {
+     //       holder.mTvHeadline.setText(mytimesList.get(position).getResponse().getDocs().get(0).getHeadline().getMain());
+     //       holder.mTvHeadline.setText(mNyTimesSearch.getResponse().getDocs().get(position).get_abstract());
+        }
 
         if(ImageUtils.isValidImagePath(mNyTimesSearch, position)) {
             String imageUrl = mNyTimesSearch.getResponse().getDocs().get(position).getMultimedia().get(0).getUrl();
@@ -84,7 +94,12 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.NewsFe
         }
     }
 
+    public void updateNewsFeedOnDemand(int page) {
+
+    }
+
     public void updateNewsFeed(NYTimesSearch nyTimesSearch) {
+      //  mytimesList.add(mNyTimesSearch.getResponse().getDocs().get(0));
         mNyTimesSearch = nyTimesSearch;
         notifyDataSetChanged();
     }

@@ -66,8 +66,20 @@ public class NewsListModelImp implements NewsListModelContract {
         // String newsDesk = "news_desk:(\"Politics\" \"Health\")";
         String newsDesk = "news_desk:(\"Politics\" )";
         String sort = "newest";
+        String arts = "Arts";
+        String fashion = "Fashion";
+        String sports = "Sports";
 
-        mSubscription = mNYTimesSearchService.getNewsdeskQuery(beginDate, sort, newsDesk, query, Constants.API_KEY)
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("news_desk:(\"");
+        stringBuilder.append(arts);
+        stringBuilder.append(" ");
+        stringBuilder.append(fashion);
+        stringBuilder.append(" ");
+        stringBuilder.append(sports);
+        stringBuilder.append("\")");
+
+        mSubscription = mNYTimesSearchService.getNewsdeskQuery(beginDate, sort, stringBuilder.toString(), query, Constants.API_KEY)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<NYTimesSearch>() {
