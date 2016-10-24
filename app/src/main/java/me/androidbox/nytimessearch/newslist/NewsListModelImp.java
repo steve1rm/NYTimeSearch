@@ -62,8 +62,9 @@ public class NewsListModelImp implements NewsListModelContract {
     @Override
     public void getSearchNewsDeskResults(String newsdesk, final NewsListSearchListener newsListSearchListener) {
         String query = "trump";
-        String beginDate = "20160101";
-        String newsDesk = "news_desk:(\"Politics\" \"Health\")";
+        String beginDate = "20150101";
+        // String newsDesk = "news_desk:(\"Politics\" \"Health\")";
+        String newsDesk = "news_desk:(\"Politics\" )";
         String sort = "newest";
 
         mSubscription = mNYTimesSearchService.getNewsdeskQuery(beginDate, sort, newsDesk, query, Constants.API_KEY)

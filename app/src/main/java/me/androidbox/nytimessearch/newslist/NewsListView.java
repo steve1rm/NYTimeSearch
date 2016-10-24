@@ -57,7 +57,7 @@ public class NewsListView extends Fragment implements
         // Inflate the layout for this fragment
         final View view = inflater.inflate(R.layout.news_list_view, container, false);
 
-        ButterKnife.bind(NewsListView.this, view);
+        mUnbinder = ButterKnife.bind(NewsListView.this, view);
 
         setupAdapter();
 

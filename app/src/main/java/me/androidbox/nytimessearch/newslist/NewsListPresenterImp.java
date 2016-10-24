@@ -49,7 +49,8 @@ public class NewsListPresenterImp implements
     @Override
     public void getSearchRequestQuery() {
         String query = view.getInputUserQuery();
-        mNewsListModelImp.getSearchNewsDeskResults(query, NewsListPresenterImp.this);
+      //  mNewsListModelImp.getSearchNewsDeskResults(query, NewsListPresenterImp.this);
+        mNewsListModelImp.getSearchAllResults(NewsListPresenterImp.this);
     }
 
     /* Model -->> Presenter */

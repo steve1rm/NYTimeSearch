@@ -248,8 +248,8 @@ public class NYTimesSearch {
             }
 
             public static class Byline {
-                private List<Person> person;
                 private String original;
+                private List<Person> person;
 
                 public String getOriginal() {
                     return original;

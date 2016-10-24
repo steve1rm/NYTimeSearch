@@ -1,7 +1,9 @@
 package me.androidbox.nytimessearch.newslist;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +20,7 @@ import butterknife.Unbinder;
 import me.androidbox.nytimessearch.R;
 import me.androidbox.nytimessearch.model.NYTimesSearch;
 import me.androidbox.nytimessearch.utils.Constants;
+import me.androidbox.nytimessearch.utils.ImageUtils;
 
 /**
  * Created by steve on 10/22/16.
@@ -52,21 +55,33 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.NewsFe
         return new NewsFeedViewHolder(view);
     }
 
+
+
     @Override
     public void onBindViewHolder(NewsFeedViewHolder holder, int position) {
         holder.mTvHeadline.setText(mNyTimesSearch.getResponse().getDocs().get(position).getHeadline().getMain());
 
-        String imageUrl = mNyTimesSearch.getResponse().getDocs().get(position).getMultimedia().get(0).getUrl();
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(Constants.WEB_URL);
-        stringBuilder.append(imageUrl);
+        if(ImageUtils.isValidImagePath(mNyTimesSearch, position)) {
+            String imageUrl = mNyTimesSearch.getResponse().getDocs().get(position).getMultimedia().get(0).getUrl();
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append(Constants.WEB_URL);
+            stringBuilder.append(imageUrl);
 
-        Glide.with(mContext.get())
-                .load(stringBuilder.toString())
-                .centerCrop()
-                .crossFade()
-                .into(holder.mIvNewsFeed)
-        ;
+            Glide.with(mContext.get())
+                    .load(stringBuilder.toString())
+                    .placeholder(R.drawable.newyorktimes_placeholder)
+                    .centerCrop()
+                    .crossFade()
+                    .into(holder.mIvNewsFeed);
+        }
+        else {
+            Glide.with(mContext.get())
+                    .load(R.drawable.newyorktimes_placeholder)
+                    .placeholder(R.drawable.newyorktimes_placeholder)
+                    .centerCrop()
+                    .crossFade()
+                    .into(holder.mIvNewsFeed);
+        }
     }
 
     public void updateNewsFeed(NYTimesSearch nyTimesSearch) {
