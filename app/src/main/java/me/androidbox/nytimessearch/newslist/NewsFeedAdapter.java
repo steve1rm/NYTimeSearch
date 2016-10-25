@@ -1,16 +1,21 @@
 package me.androidbox.nytimessearch.newslist;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+
+import org.parceler.Parcel;
+import org.parceler.Parcels;
 
 import java.lang.ref.WeakReference;
 
@@ -19,8 +24,11 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import me.androidbox.nytimessearch.R;
 import me.androidbox.nytimessearch.model.NYTimesSearch;
+import me.androidbox.nytimessearch.newsdetail.NewsDetailActivity;
 import me.androidbox.nytimessearch.utils.Constants;
 import me.androidbox.nytimessearch.utils.ImageUtils;
+
+import static android.os.Build.VERSION_CODES.N;
 
 /**
  * Created by steve on 10/22/16.
@@ -89,7 +97,7 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.NewsFe
         notifyDataSetChanged();
     }
 
-    static class NewsFeedViewHolder extends RecyclerView.ViewHolder {
+    class NewsFeedViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.tvHeadline) TextView mTvHeadline;
         @BindView(R.id.ivNewsFeed) ImageView mIvNewsFeed;
 
@@ -99,6 +107,16 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.NewsFe
             super(itemView);
 
             mUnbinder = ButterKnife.bind(NewsFeedViewHolder.this, itemView);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(mContext.get(), NewsDetailActivity.class);
+                    final String weburl = mNyTimesSearch.getResponse().getDocs().get(getAdapterPosition()).getWeb_url();
+                    intent.putExtra("weburl_key", weburl);
+                    mContext.get().startActivity(intent);
+                }
+            });
         }
     }
 }
