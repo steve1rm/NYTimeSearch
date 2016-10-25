@@ -2,20 +2,14 @@ package me.androidbox.nytimessearch.newslist;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-
-import org.parceler.Parcel;
-import org.parceler.Parcels;
 
 import java.lang.ref.WeakReference;
 
@@ -27,8 +21,6 @@ import me.androidbox.nytimessearch.model.NYTimesSearch;
 import me.androidbox.nytimessearch.newsdetail.NewsDetailActivity;
 import me.androidbox.nytimessearch.utils.Constants;
 import me.androidbox.nytimessearch.utils.ImageUtils;
-
-import static android.os.Build.VERSION_CODES.N;
 
 /**
  * Created by steve on 10/22/16.
@@ -63,8 +55,6 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.NewsFe
         return new NewsFeedViewHolder(view);
     }
 
-
-
     @Override
     public void onBindViewHolder(NewsFeedViewHolder holder, int position) {
         holder.mTvHeadline.setText(mNyTimesSearch.getResponse().getDocs().get(position).getHeadline().getMain());
@@ -93,6 +83,11 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.NewsFe
     }
 
     public void updateNewsFeed(NYTimesSearch nyTimesSearch) {
+        mNyTimesSearch = nyTimesSearch;
+        notifyDataSetChanged();
+    }
+
+    public void updatedNewsFeed(NYTimesSearch nyTimesSearch) {
         mNyTimesSearch = nyTimesSearch;
         notifyDataSetChanged();
     }

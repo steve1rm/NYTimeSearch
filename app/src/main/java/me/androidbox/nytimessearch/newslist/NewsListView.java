@@ -38,6 +38,7 @@ public class NewsListView extends Fragment implements
         DatePickerDialogFragment.DatePickerDialogHandler,
         NewsListViewContract,
         SettingsFilter.SettingFilterListener {
+    private EndlessRecyclerViewScrollListener scollListener;
 
     @Inject NewsListPresenterImp mNewsListPresenterImp;
     private NewsFeedAdapter mNewsFeedAdapter;
@@ -92,6 +93,20 @@ public class NewsListView extends Fragment implements
         StaggeredGridLayoutManager staggeredGridLayoutManager = new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL);
         mRvNewsFeed.setLayoutManager(staggeredGridLayoutManager);
         mRvNewsFeed.setAdapter(mNewsFeedAdapter);
+
+        scollListener = new EndlessRecyclerViewScrollListener(staggeredGridLayoutManager) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+                Timber.d("onLoadMore page %d %d", page, totalItemsCount);
+                loadNextDataFromApi(page);
+            }
+        };
+
+        mRvNewsFeed.addOnScrollListener(scollListener);
+    }
+
+    public void loadNextDataFromApi(int offset) {
+       mNewsListPresenterImp.getSearchRequest();
     }
 
     @Override
