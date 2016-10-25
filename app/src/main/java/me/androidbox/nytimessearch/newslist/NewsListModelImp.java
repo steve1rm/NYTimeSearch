@@ -59,13 +59,15 @@ public class NewsListModelImp implements NewsListModelContract {
     sort = oldest or newest
      */
 
+
+
     @Override
-    public void getSearchNewsDeskResults(String newsdesk, final NewsListSearchListener newsListSearchListener) {
-        String query = "trump";
+    public void getSearchNewsDeskResults(String newsdesk, String query, String date, String sort, final NewsListSearchListener newsListSearchListener) {
+      //  String query = "trump";
         String beginDate = "20150101";
         // String newsDesk = "news_desk:(\"Politics\" \"Health\")";
         String newsDesk = "news_desk:(\"Politics\" )";
-        String sort = "newest";
+        String msort = "newest";
 
         mSubscription = mNYTimesSearchService.getNewsdeskQuery(beginDate, sort, newsDesk, query, Constants.API_KEY)
                 .subscribeOn(Schedulers.io())

@@ -9,5 +9,5 @@ public interface NewsListPresenterContract<NewsListView>  {
     void attachView(NewsListView view);
     void detachView();
     void getSearchRequest();
-    void getSearchRequestQuery();
+    void getSearchRequestQuery(boolean arts, boolean sport, boolean fashion, String date, String query, String sort);
 }

@@ -19,8 +19,6 @@ import butterknife.OnClick;
 import butterknife.Unbinder;
 import me.androidbox.nytimessearch.R;
 
-import static me.androidbox.nytimessearch.R.string.arts;
-
 /**
  * Created by steve on 10/25/16.
  */
@@ -72,6 +70,7 @@ public class SettingsFilter extends DialogFragment {
         String sort = spNewsDesk.getSelectedItem().toString();
 
         mSettingsFilterListener.onSettingsFilter(arts, sports, fashion, date, query, sort);
+        this.dismiss();
     }
 
     @SuppressWarnings("unused")

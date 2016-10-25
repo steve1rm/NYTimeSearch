@@ -24,6 +24,7 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import butterknife.Unbinder;
 import me.androidbox.nytimessearch.R;
 import me.androidbox.nytimessearch.di.DaggerInjector;
@@ -46,7 +47,13 @@ public class NewsListView extends Fragment implements
     @BindView(R.id.tbNYTimes) Toolbar mToolbar;
 
     private Unbinder mUnbinder;
-    
+    private String mDate;
+    private boolean mArts;
+    private boolean mSports;
+    private boolean mFashion;
+    private String mQuery;
+    private String mSorted;
+
     public NewsListView() {
         // Required empty public constructor
     }
@@ -124,7 +131,7 @@ public class NewsListView extends Fragment implements
         if(mNewsListPresenterImp != null) {
             Timber.d("mNewsListPresenterImp != null");
             mNewsListPresenterImp.attachView(NewsListView.this);
-            mNewsListPresenterImp.getSearchRequestQuery();
+            mNewsListPresenterImp.getSearchRequest();
         }
         else {
             Timber.e("mNewsListPresenterImp == null");
@@ -174,7 +181,17 @@ public class NewsListView extends Fragment implements
 
     @Override
     public void onSettingsFilter(boolean arts, boolean sport, boolean fashion, String date, String query, String sort) {
+        mArts = arts;
+        mSports = sport;
+        mFashion = fashion;
+        mDate = date;
+        mQuery = query;
+        mSorted = sort;
+    }
 
+    @OnClick(R.id.fabSearch)
+    public void searchNewsResults() {
+        mNewsListPresenterImp.getSearchRequestQuery(mArts, mSports, mFashion, mDate, mQuery, mSorted);
     }
 
     @Override

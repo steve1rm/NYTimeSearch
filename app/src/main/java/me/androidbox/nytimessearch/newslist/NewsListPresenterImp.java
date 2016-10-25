@@ -6,6 +6,8 @@ import me.androidbox.nytimessearch.di.DaggerInjector;
 import me.androidbox.nytimessearch.model.NYTimesSearch;
 import timber.log.Timber;
 
+import static me.androidbox.nytimessearch.R.string.sports;
+
 /**
  * Created by steve on 10/20/16.
  */
@@ -47,10 +49,24 @@ public class NewsListPresenterImp implements
     }
 
     @Override
-    public void getSearchRequestQuery() {
-        String query = view.getInputUserQuery();
+    public void getSearchRequestQuery(boolean arts, boolean sport, boolean fashion, String date, String query, String sort) {
       //  mNewsListModelImp.getSearchNewsDeskResults(query, NewsListPresenterImp.this);
-        mNewsListModelImp.getSearchAllResults(NewsListPresenterImp.this);
+        StringBuilder sbNewsdesk = new StringBuilder();
+        sbNewsdesk.append("news_desk:(\"");
+        if(arts) {
+            sbNewsdesk.append("Arts");
+            sbNewsdesk.append(" ");
+        }
+        if(fashion) {
+            sbNewsdesk.append("Fashion");
+            sbNewsdesk.append(" ");
+        }
+        if(sport) {
+            sbNewsdesk.append("Sports");
+        }
+        sbNewsdesk.append("\")");
+
+        mNewsListModelImp.getSearchNewsDeskResults(sbNewsdesk.toString(), query, date, sort, NewsListPresenterImp.this);
     }
 
     /* Model -->> Presenter */

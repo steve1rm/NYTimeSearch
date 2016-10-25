@@ -13,7 +13,6 @@ public interface NewsListModelContract {
     }
 
     void getSearchAllResults(NewsListSearchListener newsListSearchListener);
-    void getSearchNewsDeskResults(String newsdesk, NewsListSearchListener newsListSearchListener);
-
+    void getSearchNewsDeskResults(String newsdesk, String query, String date, String sort, NewsListSearchListener newsListSearchListener);
     void releaseResources();
 }
