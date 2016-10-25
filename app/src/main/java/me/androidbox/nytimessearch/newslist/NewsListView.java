@@ -1,10 +1,11 @@
 package me.androidbox.nytimessearch.newslist;
 
 
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.Fragment;
+
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
@@ -15,35 +16,27 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.DatePicker;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.codetroopers.betterpickers.datepicker.DatePickerBuilder;
 import com.codetroopers.betterpickers.datepicker.DatePickerDialogFragment;
-
-import java.util.Calendar;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import butterknife.Unbinder;
 import me.androidbox.nytimessearch.R;
 import me.androidbox.nytimessearch.di.DaggerInjector;
 import me.androidbox.nytimessearch.model.NYTimesSearch;
 import timber.log.Timber;
 
-import static me.androidbox.nytimessearch.R.id.tbNYTimes;
-import static me.androidbox.nytimessearch.R.id.tvDate;
-
 /**
  * A simple {@link Fragment} subclass.
  */
 public class NewsListView extends Fragment implements
         DatePickerDialogFragment.DatePickerDialogHandler,
-        NewsListViewContract {
+        NewsListViewContract,
+        SettingsFilter.SettingFilterListener {
 
     @Inject NewsListPresenterImp mNewsListPresenterImp;
     private NewsFeedAdapter mNewsFeedAdapter;
@@ -53,7 +46,7 @@ public class NewsListView extends Fragment implements
     @BindView(R.id.tbNYTimes) Toolbar mToolbar;
 
     private Unbinder mUnbinder;
-
+    
     public NewsListView() {
         // Required empty public constructor
     }
@@ -170,9 +163,17 @@ public class NewsListView extends Fragment implements
 
         switch(item.getItemId()) {
             case R.id.action_settings:
+                FragmentManager fragmentManager = getFragmentManager();
+                SettingsFilter settingsFilter = SettingsFilter.getNewInstance(NewsListView.this);
+                settingsFilter.show(fragmentManager, "settingsfilter");
+
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onSettingsFilter(boolean arts, boolean sport, boolean fashion, String date, String query, String sort) {
 
     }
 
