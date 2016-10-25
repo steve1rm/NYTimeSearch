@@ -1,12 +1,18 @@
 package me.androidbox.nytimessearch.newslist;
 
 
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.DatePicker;
@@ -29,6 +35,9 @@ import me.androidbox.nytimessearch.di.DaggerInjector;
 import me.androidbox.nytimessearch.model.NYTimesSearch;
 import timber.log.Timber;
 
+import static me.androidbox.nytimessearch.R.id.tbNYTimes;
+import static me.androidbox.nytimessearch.R.id.tvDate;
+
 /**
  * A simple {@link Fragment} subclass.
  */
@@ -37,9 +46,11 @@ public class NewsListView extends Fragment implements
         NewsListViewContract {
 
     @Inject NewsListPresenterImp mNewsListPresenterImp;
+    private NewsFeedAdapter mNewsFeedAdapter;
 
-    @BindView(R.id.tvDate) TextView tvDate;
+  //  @BindView(R.id.tvDate) TextView tvDate;
     @BindView(R.id.rvNewsFeed) RecyclerView mRvNewsFeed;
+    @BindView(R.id.tbNYTimes) Toolbar mToolbar;
 
     private Unbinder mUnbinder;
 
@@ -52,6 +63,12 @@ public class NewsListView extends Fragment implements
     }
 
     @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
@@ -59,12 +76,16 @@ public class NewsListView extends Fragment implements
 
         mUnbinder = ButterKnife.bind(NewsListView.this, view);
 
+        setupToolbar();
         setupAdapter();
 
         return view;
     }
 
-    private NewsFeedAdapter mNewsFeedAdapter;
+    private void setupToolbar() {
+        AppCompatActivity appCompatActivity = (AppCompatActivity)getActivity();
+        appCompatActivity.setSupportActionBar(mToolbar);
+    }
 
     private void setupAdapter() {
         mNewsFeedAdapter = new NewsFeedAdapter(new NYTimesSearch(), getActivity());
@@ -89,11 +110,11 @@ public class NewsListView extends Fragment implements
         sb.append("-");
         sb.append(year);
 
-        tvDate.setText(sb.toString());
+   //     tvDate.setText(sb.toString());
     }
 
-    @SuppressWarnings("unused")
-    @OnClick(R.id.tvDate)
+  /*  @SuppressWarnings("unused")
+    @OnClick(tvDate)
     public void getDate() {
         DatePickerBuilder datePickerDialogFragment = new DatePickerBuilder()
                 .setFragmentManager(getChildFragmentManager())
@@ -101,7 +122,7 @@ public class NewsListView extends Fragment implements
                 .setTargetFragment(NewsListView.this);
         datePickerDialogFragment.show();
     }
-
+*/
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -142,5 +163,22 @@ public class NewsListView extends Fragment implements
         super.onDestroyView();
         mNewsListPresenterImp.detachView();
         mUnbinder.unbind();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch(item.getItemId()) {
+            case R.id.action_settings:
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.main, menu);
+        super.onCreateOptionsMenu(menu, inflater);
     }
 }
