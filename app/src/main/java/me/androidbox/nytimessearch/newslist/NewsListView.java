@@ -1,7 +1,5 @@
 package me.androidbox.nytimessearch.newslist;
 
-
-
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
@@ -20,6 +18,9 @@ import android.widget.Toast;
 
 import com.codetroopers.betterpickers.datepicker.DatePickerDialogFragment;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.inject.Inject;
 
 import butterknife.BindView;
@@ -28,8 +29,11 @@ import butterknife.OnClick;
 import butterknife.Unbinder;
 import me.androidbox.nytimessearch.R;
 import me.androidbox.nytimessearch.di.DaggerInjector;
+import me.androidbox.nytimessearch.model.Article;
 import me.androidbox.nytimessearch.model.NYTimesSearch;
 import timber.log.Timber;
+
+import static android.R.id.list;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -54,6 +58,8 @@ public class NewsListView extends Fragment implements
     private boolean mFashion;
     private String mQuery;
     private String mSorted;
+
+    List<NYTimesSearch.Response.Docs> listTimesSearches = new ArrayList<>();
 
     public NewsListView() {
         // Required empty public constructor
@@ -89,7 +95,7 @@ public class NewsListView extends Fragment implements
     }
 
     private void setupAdapter() {
-        mNewsFeedAdapter = new NewsFeedAdapter(new NYTimesSearch(), getActivity());
+        mNewsFeedAdapter = new NewsFeedAdapter(listTimesSearches, getActivity());
         StaggeredGridLayoutManager staggeredGridLayoutManager = new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL);
         mRvNewsFeed.setLayoutManager(staggeredGridLayoutManager);
         mRvNewsFeed.setAdapter(mNewsFeedAdapter);
@@ -170,7 +176,8 @@ public class NewsListView extends Fragment implements
                 nyTimesSearch.getStatus(),
                 nyTimesSearch.getResponse().getDocs().get(0).getHeadline().getMain());
 
-        mNewsFeedAdapter.updateNewsFeed(nyTimesSearch);
+        listTimesSearches.addAll(nyTimesSearch.getResponse().getDocs());
+        mNewsFeedAdapter.updatedNewsFeed(listTimesSearches);
     }
 
     @Override

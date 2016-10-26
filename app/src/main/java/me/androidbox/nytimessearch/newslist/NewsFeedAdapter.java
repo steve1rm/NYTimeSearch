@@ -3,6 +3,7 @@ package me.androidbox.nytimessearch.newslist;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,9 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -28,24 +32,26 @@ import me.androidbox.nytimessearch.utils.ImageUtils;
 
 public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.NewsFeedViewHolder> {
 
-    private NYTimesSearch mNyTimesSearch;
     private WeakReference<Context> mContext;
+    private List<NYTimesSearch.Response.Docs> listDocs = Collections.emptyList();
 
-    public NewsFeedAdapter(NYTimesSearch nyTimesSearch, Context context) {
-        mNyTimesSearch = nyTimesSearch;
+    public NewsFeedAdapter(List<NYTimesSearch.Response.Docs> nyTimesSearch, Context context) {
+        listDocs = new ArrayList<>(nyTimesSearch);
         mContext = new WeakReference<>(context);
     }
 
     @Override
     public int getItemCount() {
-        if(mNyTimesSearch != null) {
+        return listDocs.size();
+
+ /*       if(mNyTimesSearch != null) {
             return (mNyTimesSearch.getResponse() != null)
                     ? mNyTimesSearch.getResponse().getDocs().size() : 0;
         }
         else {
             return 0;
         }
-    }
+*/    }
 
     @Override
     public NewsFeedViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -57,7 +63,32 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.NewsFe
 
     @Override
     public void onBindViewHolder(NewsFeedViewHolder holder, int position) {
-        holder.mTvHeadline.setText(mNyTimesSearch.getResponse().getDocs().get(position).getHeadline().getMain());
+
+        String headline = "";
+        if(listDocs.get(position).getHeadline().getMain() != null) {
+            headline = listDocs.get(position).getHeadline().getMain();
+        }
+
+        holder.mTvHeadline.setText(headline);
+
+        if(listDocs.get(position).getMultimedia() != null) {
+            if (listDocs.get(position).getMultimedia().size() > 0) {
+                String imageUrl = listDocs.get(position).getMultimedia().get(0).getUrl();
+                if (!TextUtils.isEmpty(imageUrl)) {
+                    StringBuilder stringBuilder = new StringBuilder();
+                    stringBuilder.append(Constants.WEB_URL);
+                    stringBuilder.append(imageUrl);
+
+                    Glide.with(mContext.get())
+                            .load(stringBuilder.toString())
+                            .placeholder(R.drawable.newyorktimes_placeholder)
+                            .centerCrop()
+                            .crossFade()
+                            .into(holder.mIvNewsFeed);
+                }
+            }
+        }
+/*
 
         if(ImageUtils.isValidImagePath(mNyTimesSearch, position)) {
             String imageUrl = mNyTimesSearch.getResponse().getDocs().get(position).getMultimedia().get(0).getUrl();
@@ -80,15 +111,16 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.NewsFe
                     .crossFade()
                     .into(holder.mIvNewsFeed);
         }
+*/
     }
 
-    public void updateNewsFeed(NYTimesSearch nyTimesSearch) {
-        mNyTimesSearch = nyTimesSearch;
+    public void updateNewsFeedOnDemand(List<NYTimesSearch.Response.Docs> nyTimesSearch) {
+        listDocs.addAll(nyTimesSearch);
         notifyDataSetChanged();
     }
 
-    public void updatedNewsFeed(NYTimesSearch nyTimesSearch) {
-        mNyTimesSearch = nyTimesSearch;
+    public void updatedNewsFeed(List<NYTimesSearch.Response.Docs> nyTimesSearch) {
+        listDocs.addAll(nyTimesSearch);
         notifyDataSetChanged();
     }
 
@@ -106,10 +138,12 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.NewsFe
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+/*
                     Intent intent = new Intent(mContext.get(), NewsDetailActivity.class);
                     final String weburl = mNyTimesSearch.getResponse().getDocs().get(getAdapterPosition()).getWeb_url();
                     intent.putExtra("weburl_key", weburl);
                     mContext.get().startActivity(intent);
+*/
                 }
             });
         }
